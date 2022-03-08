@@ -13,7 +13,7 @@ async function filetype(extension) {
     throw new Error(`the extension cannot start with .`);
 
   if (extension.length == 0 || extension == undefined)
-    throw new Error(`extension cannot be empty`);
+    throw new Error(`the extension name cannot be empty`);
 
   const get = await spawnSync(
     `curl`,
@@ -36,11 +36,9 @@ async function filetype(extension) {
         ).result
       });
     });
-  } else throw new Error(`extension ${extension} not found`);
+  } else throw new Error(`extension named ${extension} not found`);
 
   return { name: extension, results: extensionResults };
 }
-
-filetype("js").then(log);
 
 module.exports = filetype;
