@@ -3,6 +3,7 @@ const { log } = require("console");
 const { JSDOM } = require("jsdom");
 const { stripHtml } = require("string-strip-html");
 const mime = require("mime");
+const path = require("path");
 
 async function request(url) {
   const res = await spawnSync(`curl`, [url], {
@@ -13,14 +14,28 @@ async function request(url) {
 
 const filetype = {
   /**
-   * @param {String} extension the extension name to search
+   * @param {String} type the type could be "name" | "url" | "file"
+   * @param {String} name the extension name to search
    */
-  async get(extension) {
+  async get(type = ["name", "url", "file"], name) {
     var extensionResults = [];
     var categorys = [];
+    var extension = "";
 
-    if (extension.startsWith("."))
-      throw new Error(`the extension cannot start with .`);
+    switch (type) {
+      case "name":
+        extension = name;
+        break;
+      case "file":
+        var data = name.split(".").slice(1).join(".");
+        extension = data;
+        break;
+      case "url":
+        var data = name.split("https://").slice(1).join("").split("/");
+        data = data[data.length - 1].split(".").slice(1).join(".");
+        extension = data;
+        break;
+    }
 
     if (extension.length == 0 || extension == undefined)
       throw new Error(`the extension name cannot be empty`);

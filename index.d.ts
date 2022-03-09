@@ -1,7 +1,11 @@
 /**
- * @param {String} extension the extension name to search
+ * @param {String} type the type could be "name" | "url" | "file"
+ * @param {String} name the extension name to search
  */
-export function get(extension: string): Promise<{
+export function get(
+  type: "url" | "file" | "name",
+  name: string
+): Promise<{
   name: string;
   source: string;
   results: any[];

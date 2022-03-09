@@ -8,6 +8,15 @@
     "type": "git",
     "url": "https://github.com/otoniel19/filetype.js"
   },
+  "keywords": [
+    "mime",
+    "jsdom",
+    "html",
+    "fileinfo",
+    "filetype",
+    "information",
+    "node.js"
+  ],
   "devDependencies": {
     "@types/jsdom": "^16.2.14",
     "@types/node": "^17.0.21"

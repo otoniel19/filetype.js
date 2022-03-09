@@ -8,7 +8,13 @@
 ```js
 const log = console.log.bind(this);
 var filetype = require("@otoniel19/filetype.js");
-filetype.get("js").then(log);
+
+//all the three methods will return the same res
+filetype.get("name", "js").then(log);
+
+filetype.get("url", "https://myurl.as/assets/script.js").then(log);
+
+filetype.get("file", "myfile.js").then(log);
 ```
 
 - will output:
