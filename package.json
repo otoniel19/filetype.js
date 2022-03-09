@@ -1,7 +1,7 @@
 {
   "name": "@otoniel19/filetype.js",
   "description": "filetype.js get the type of file by extension name using node.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "index.js",
   "license": "MIT",
   "repository": {
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "jsdom": "^19.0.0",
+    "mime": "^3.0.0",
     "string-strip-html": "8.3.0"
   }
 }

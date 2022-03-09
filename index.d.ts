@@ -1,8 +1,8 @@
-export = filetype;
 /**
  * @param {String} extension the extension name to search
  */
-declare function filetype(extension: string): Promise<{
+export function get(extension: string): Promise<{
   name: string;
+  source: string;
   results: any[];
 }>;
