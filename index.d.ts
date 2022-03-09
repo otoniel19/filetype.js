@@ -2,4 +2,7 @@ export = filetype;
 /**
  * @param {String} extension the extension name to search
  */
-declare function filetype(extension: string): Promise<any>;
+declare function filetype(extension: string): Promise<{
+  name: string;
+  results: any[];
+}>;

@@ -62,8 +62,4 @@ async function filetype(extension) {
   return { name: extension, results: extensionResults };
 }
 
-filetype("js").then((o) => {
-  log(o);
-});
-
 module.exports = filetype;
