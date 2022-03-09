@@ -8,6 +8,7 @@ const { stripHtml } = require("string-strip-html");
  */
 async function filetype(extension) {
   var extensionResults = [];
+  var categorys = [];
 
   if (extension.startsWith("."))
     throw new Error(`the extension cannot start with .`);
@@ -22,23 +23,47 @@ async function filetype(extension) {
       shell: true
     }
   ).stdout.toString();
+
   var html = new JSDOM(get).window;
-  var extensionFound = !html.document
-    .querySelector("title")
-    .innerHTML.includes("Not Found");
-  if (extensionFound) {
-    const extResults = html.document.querySelectorAll("h2.title");
-    extResults.forEach((name, idx) => {
-      extensionResults.push({
-        name: name.innerHTML,
-        description: stripHtml(
-          html.document.querySelectorAll("div.infoBox>p")[idx].innerHTML
-        ).result
+  with (html) {
+    var extensionFound = !document
+      .querySelector("title")
+      .innerHTML.includes("Not Found");
+
+    if (extensionFound) {
+      //the name
+      const extResults = document.querySelectorAll("h2.title");
+
+      extResults.forEach((name, idx) => {
+        //pick img url
+        var img = document
+          .querySelectorAll("div.entryIcon")
+          [idx].getAttribute("data-bg");
+        //select category
+        document
+          .querySelectorAll("td>a")
+          .forEach((o) => categorys.push(o.getAttribute("href")));
+
+        //remove whitespaces from categorys
+        categorys = categorys.filter((str) => /\S/.test(str));
+
+        extensionResults.push({
+          name: name.innerHTML,
+          description: stripHtml(
+            document.querySelectorAll("div.infoBox>p")[idx].innerHTML
+          ).result,
+          img_url: img,
+          category: categorys[idx].split("/filetypes/").join("")
+        });
       });
-    });
-  } else throw new Error(`extension named ${extension} not found`);
+    } else throw new Error(`extension named ${extension} not found`);
+  }
 
   return { name: extension, results: extensionResults };
 }
+
+filetype("js").then((o) => {
+  log(o);
+});
 
 module.exports = filetype;
