@@ -15,7 +15,9 @@
     "fileinfo",
     "filetype",
     "information",
-    "node.js"
+    "node.js",
+    "client",
+    "request"
   ],
   "bin": {
     "filetypejs": "./bin/cli.js"

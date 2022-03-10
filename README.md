@@ -100,6 +100,6 @@ filetype.searchBy("js").then(console.log);
 
 # the cli
 
-> the cli has the get and getByMime methods but you specify the output json or yaml
+> the cli has the get getByMimen and searchBy methods but you specify the output json or yaml
 > <br>
 > run filetypejs --help to view commands
