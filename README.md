@@ -9,12 +9,9 @@
 const log = console.log.bind(this);
 var filetype = require("@otoniel19/filetype.js");
 
-//all the three methods will return the same res
-filetype.get("name", "js").then(log);
+filetype.get("js").then(log);
 
-filetype.get("url", "https://myurl.as/assets/script.js").then(log);
-
-filetype.get("file", "myfile.js").then(log);
+filetype.get("https://myurl.as/assets/script.js").then(log);
 ```
 
 - will output:
@@ -30,7 +27,7 @@ filetype.get("file", "myfile.js").then(log);
       "mime-type": "application/javascript",
       "img_url": "https://fileinfo.com/img/icons/files/128/js-45.png",
       "category": "web",
-      "format": "Text"
+      "type": "text"
     },
     {
       "name": "JScript Executable Script",
@@ -38,7 +35,7 @@ filetype.get("file", "myfile.js").then(log);
       "mime-type": "application/javascript",
       "img_url": "https://fileinfo.com/img/icons/files/128/default.png",
       "category": "executable",
-      "format": "N/A"
+      "type": "unknown"
     }
   ]
 }

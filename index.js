@@ -12,32 +12,28 @@ async function request(url) {
   return res;
 }
 
+const normalizeName = (inner) =>
+  inner === "N/A" || inner === null || inner === undefined
+    ? "unknown"
+    : inner.toLowerCase();
+
 const filetype = {
   /**
    * @param {String} type the type could be "name" | "url" | "file"
    * @param {String} name the extension name to search
    */
-  async get(type = ["name", "url", "file"], name) {
+  async get(name) {
     var extensionResults = [];
     var categorys = [];
     var extension = "";
 
-    switch (type) {
-      case "name":
-        extension = name;
-        break;
-      case "file":
-        var data = name.split(".").slice(1).join(".");
-        extension = data;
-        break;
-      case "url":
-        var data = name.split("https://").slice(1).join("").split("/");
-        data = data[data.length - 1].split(".").slice(1).join(".");
-        extension = data;
-        break;
-    }
+    if (name.startsWith("https://")) {
+      var data = name.split("https://").slice(1).join("").split("/");
+      data = data[data.length - 1].split(".").slice(1).join(".");
+      extension = data;
+    } else extension = name;
 
-    if (extension.length == 0 || extension == undefined)
+    if (name.length == 0 || name == undefined)
       throw new Error(`the extension name cannot be empty`);
 
     //request html content
@@ -72,13 +68,12 @@ const filetype = {
             description: stripHtml(
               document.querySelectorAll("div.infoBox>p")[idx].innerHTML
             ).result,
-            "mime-type":
-              mime.getType(extension) != null
-                ? mime.getType(extension)
-                : "unknown",
+            "mime-type": normalizeName(mime.getType(extension)),
             img_url: img,
             category: categorys[idx].split("/filetypes/").join(""),
-            format: document.querySelectorAll("a.formatButton")[idx].innerHTML
+            type: normalizeName(
+              document.querySelectorAll("a.formatButton")[idx].innerHTML
+            )
           });
         }); //extension not found
       } else throw new Error(`extension .${extension} not found`);
