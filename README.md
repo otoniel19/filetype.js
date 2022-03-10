@@ -90,11 +90,11 @@ filetype.searchBy("js").then(console.log);
 
 - will output:
 
-```json
+```js
 {
   search: "js",
   source: "https://fileinfo.com/search?sfield=description&query=js",
- results: [...results]
+  results: [...results]
 }
 ```
 
