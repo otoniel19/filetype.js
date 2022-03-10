@@ -81,8 +81,25 @@ filetype.getByMime("application/javascript").then(log);
 }
 ```
 
+- search by results
+
+```js
+const filetype = require("@otoniel19/filetype.js");
+filetype.searchBy("js").then(console.log);
+```
+
+- will output:
+
+```json
+{
+  search: "js",
+  source: "https://fileinfo.com/search?sfield=description&query=js",
+ results: [...results]
+}
+```
+
 # the cli
 
-> the cli has the same methods but you specify the output json or yaml
+> the cli has the get and getByMime methods but you specify the output json or yaml
 > <br>
 > run filetypejs --help to view commands

@@ -93,6 +93,18 @@ const filetype = {
     if (!type) throw new Error(`mimetype ${mimetype} not found`);
     const getRes = await this.get(type);
     return getRes;
+  },
+  /**
+   * @param {String} term the name to search
+   * @returns {Promise}
+   */
+  async searchBy(term) {
+    return new Promise((res, rej) => {
+      require("./lib/search")(term, (obj) => {
+        if (obj.results.length === 0) throw new Error(`no results for ${term}`);
+        else res(obj);
+      });
+    });
   }
 };
 

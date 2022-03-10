@@ -18,7 +18,6 @@ cli
       start(select, ext, "get");
     } else cli.error("error".red + ` type ${type} not supported`);
   });
-
 cli
   .command("getByMime <mime-type>")
   .description("get the extension info")
@@ -31,6 +30,21 @@ cli
     if (types.indexOf(type) != -1) {
       var select = types[types.indexOf(type)];
       start(select, ext, "getByMime");
+    } else cli.error("error".red + ` type ${type} not supported`);
+  });
+
+cli
+  .command("searchBy <term>")
+  .description("search by extensions")
+  .requiredOption(
+    "-t,--type <type>",
+    "the data type to output types: json | yaml"
+  )
+  .action((ext, { type }) => {
+    var types = ["json", "yaml"];
+    if (types.indexOf(type) != -1) {
+      var select = types[types.indexOf(type)];
+      start(select, ext, "searchBy");
     } else cli.error("error".red + ` type ${type} not supported`);
   });
 

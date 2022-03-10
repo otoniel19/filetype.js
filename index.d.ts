@@ -15,3 +15,8 @@ export function getByMime(mimetype: string): Promise<{
   source: string;
   results: any[];
 }>;
+/**
+ * @param {String} term the name to search
+ * @returns {Promise}
+ */
+export function searchBy(term: string): Promise<any>;
