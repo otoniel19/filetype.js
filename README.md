@@ -80,3 +80,9 @@ filetype.getByMime("application/javascript").then(log);
   ]
 }
 ```
+
+# the cli
+
+> the cli has the same methods but you specify the output json or yaml
+> <br>
+> run filetypejs --help to view commands
