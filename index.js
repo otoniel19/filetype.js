@@ -1,111 +1,85 @@
-const { spawnSync } = require("child_process");
-const { log } = require("console");
+const utils = require("./utils");
+const { extension } = require("mime-types");
 const { JSDOM } = require("jsdom");
-const { stripHtml } = require("string-strip-html");
+const { log } = require("console");
 const mime = require("mime");
-const path = require("path");
-const mimeType = require("mime-types");
+const { stripHtml } = require("string-strip-html");
 
-async function request(url) {
-  const res = await spawnSync(`curl`, [url], {
-    shell: true
-  }).stdout.toString();
-  return res;
-}
-
-const normalizeName = (inner) =>
-  inner === "N/A" || inner === null || inner === undefined
-    ? "unknown"
-    : inner.toLowerCase();
-
-const filetype = {
+class filetype {
   /**
-   * @param {String} type the type could be "name" | "url" | "file"
-   * @param {String} name the extension name to search
+   * @param {String} type the type to get could be "name" | "mime"
+   * @param {String} name the name to check for extension or mimetype
+   * @returns {Promise<any>}
    */
   async get(name) {
-    var extensionResults = [];
+    var res = [];
+    if (name == "" || name == undefined)
+      throw new Error(`the name cannot be empty or undefined`);
+    var isMime =
+      (await mime.getExtension(name)) != null
+        ? (name = mime.getExtension(name))
+        : name;
+
+    var { data } = await utils.get(`fileinfo.com/extension/${name}`);
+
+    var html = new JSDOM(data).window;
+    //the ext names
+    var titles = html.document.querySelectorAll("h2.title");
     var categorys = [];
-    var extension = "";
 
-    if (name.startsWith("https://")) {
-      var data = name.split("https://").slice(1).join("").split("/");
-      data = data[data.length - 1].split(".").slice(1).join(".");
-      extension = data;
-    } else extension = name;
+    titles.forEach((o, idx) => {
+      //select category
+      html.document
+        .querySelectorAll("td>a")
+        .forEach((o) => categorys.push(o.getAttribute("href")));
 
-    if (name.length == 0 || name == undefined)
-      throw new Error(`the extension name cannot be empty`);
+      //remove whitespaces from categorys
+      categorys = categorys.filter((str) => /\S/.test(str));
 
-    //request html content
-    var get = await request(`https://fileinfo.com/extension/${extension}`);
-    //use jsdom for select name description and etc
-    var html = new JSDOM(get).window;
-    with (html) {
-      //check if extension has found
-      var extensionFound = !document
-        .querySelector("title")
-        .innerHTML.includes("Not Found");
-
-      if (extensionFound) {
-        //the name
-        const extResults = document.querySelectorAll("h2.title");
-
-        extResults.forEach((name, idx) => {
-          //pick img url
-          var img = document
-            .querySelectorAll("div.entryIcon")
-            [idx].getAttribute("data-bg");
-          //select category
-          document
-            .querySelectorAll("td>a")
-            .forEach((o) => categorys.push(o.getAttribute("href")));
-
-          //remove whitespaces from categorys
-          categorys = categorys.filter((str) => /\S/.test(str));
-
-          extensionResults.push({
-            name: name.innerHTML,
-            description: stripHtml(
-              document.querySelectorAll("div.infoBox>p")[idx].innerHTML
-            ).result,
-            "mime-type": normalizeName(mime.getType(extension)),
-            img_url: img,
-            category: categorys[idx].split("/filetypes/").join(""),
-            type: normalizeName(
-              document.querySelectorAll("a.formatButton")[idx].innerHTML
-            )
-          });
-        }); //extension not found
-      } else throw new Error(`extension .${extension} not found`);
-    }
-    return {
-      name: extension,
-      source: `https://fileinfo.com/extension/${extension}`,
-      results: extensionResults
-    };
-  },
-  /**
-   * @param {String} mimetype the name of mimetype
-   */
-  async getByMime(mimetype) {
-    const type = mimeType.extension(mimetype);
-    if (!type) throw new Error(`mimetype ${mimetype} not found`);
-    const getRes = await this.get(type);
-    return getRes;
-  },
-  /**
-   * @param {String} term the name to search
-   * @returns {Promise}
-   */
-  async searchBy(term) {
-    return new Promise((res, rej) => {
-      require("./lib/search")(term, (obj) => {
-        if (obj.results.length === 0) throw new Error(`no results for ${term}`);
-        else res(obj);
+      res.push({
+        name: o.innerHTML,
+        //ext descriptions
+        description: stripHtml(
+          html.document.querySelectorAll("div.infoBox>p")[idx].innerHTML
+        ).result,
+        //mimetype of ext
+        mimetype: utils.normalize(mime.getType(name)),
+        //extension category
+        category: utils.normalize(
+          categorys[idx].split("/filetypes/").join("").toLowerCase()
+        ),
+        type: utils.normalize(
+          html.document
+            .querySelectorAll("a.formatButton")
+            [idx].innerHTML.toLowerCase()
+        )
       });
     });
+    return { extname: `${name}`, results: res };
   }
-};
+  /**
+   * @param {String} srcName the name to search
+   * @returns {Promise<any>}
+   */
+  async search(srcName) {
+    var res = await utils.get(
+      `fileinfo.com/search?sfield=description&query=${srcName}`
+    );
+    var dom = new JSDOM(res.data).window;
+    var resArray = [];
+    var titles = dom.document.querySelectorAll("td.extcol>a");
+    titles.forEach((o, idx) => {
+      resArray.push({
+        name: o.innerHTML.toLowerCase().slice(1),
+        description: stripHtml(
+          dom.document
+            .querySelectorAll("td.stretchcol")
+            [idx].innerHTML.toLowerCase()
+        ).result
+      });
+    });
+    return { searchBy: srcName, results: resArray };
+  }
+}
 
-module.exports = filetype;
+module.exports = new filetype();

@@ -16,12 +16,8 @@
     "filetype",
     "information",
     "node.js",
-    "client",
-    "request"
+    "client"
   ],
-  "bin": {
-    "filetypejs": "./bin/cli.js"
-  },
   "devDependencies": {
     "@types/jsdom": "^16.2.14",
     "@types/mime": "^2.0.3",
