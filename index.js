@@ -4,6 +4,7 @@ const { JSDOM } = require("jsdom");
 const { stripHtml } = require("string-strip-html");
 const mime = require("mime");
 const path = require("path");
+const mimeType = require("mime-types");
 
 async function request(url) {
   const res = await spawnSync(`curl`, [url], {
@@ -83,6 +84,15 @@ const filetype = {
       source: `https://fileinfo.com/extension/${extension}`,
       results: extensionResults
     };
+  },
+  /**
+   * @param {String} mimetype the name of mimetype
+   */
+  async getByMime(mimetype) {
+    const type = mimeType.extension(mimetype);
+    if (!type) throw new Error(`mimetype ${mimetype} not found`);
+    const getRes = await this.get(type);
+    return getRes;
   }
 };
 

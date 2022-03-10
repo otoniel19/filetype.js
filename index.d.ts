@@ -7,3 +7,11 @@ export function get(name: string): Promise<{
   source: string;
   results: any[];
 }>;
+/**
+ * @param {String} mimetype the name of mimetype
+ */
+export function getByMime(mimetype: string): Promise<{
+  name: string;
+  source: string;
+  results: any[];
+}>;
