@@ -1,9 +1,9 @@
-const utils = require("./utils");
-const { extension } = require("mime-types");
+const utils = require("./lib/utils");
 const { JSDOM } = require("jsdom");
 const { log } = require("console");
 const mime = require("mime");
 const { stripHtml } = require("string-strip-html");
+const error = require("./lib/error");
 
 class filetype {
   /**
@@ -23,6 +23,18 @@ class filetype {
     var { data } = await utils.get(`fileinfo.com/extension/${name}`);
 
     var html = new JSDOM(data).window;
+    try {
+      var tmp = [];
+      html.document
+        .querySelectorAll("h2.title")
+        .forEach((o) => tmp.push(o.innerHTML));
+    } catch (e) {
+      new error({
+        name: "ContentError",
+        message: "the request did not load the html correctly",
+        code: "HTML_NOT_LOADED"
+      });
+    }
     //the ext names
     var titles = html.document.querySelectorAll("h2.title");
     var categorys = [];
