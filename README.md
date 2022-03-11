@@ -6,6 +6,8 @@
 
 # usage
 
+> filetype.js supports all mimetypes in [mimedb](https://raw.githubusercontent.com/jshttp/mime-db/master/db.json)
+
 - get info by extension or mimetype
 
 ```js
@@ -38,6 +40,8 @@ filetype.get("application/javascript"); //by mimetype
 ```
 
 - search by extension info
+
+> you can search by name or mimetype
 
 ```js
 const filetype = require("@otoniel19/filetype.js");

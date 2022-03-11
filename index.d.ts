@@ -2,7 +2,6 @@ declare const _exports: filetype;
 export = _exports;
 declare class filetype {
     /**
-     * @param {String} type the type to get could be "name" | "mime"
      * @param {String} name the name to check for extension or mimetype
      * @returns {Promise<any>}
      */

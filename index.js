@@ -1,13 +1,12 @@
 const utils = require("./lib/utils");
 const { JSDOM } = require("jsdom");
-const { log } = require("console");
 const mime = require("mime");
+const mimedb = require("mime-db");
 const { stripHtml } = require("string-strip-html");
 const error = require("./lib/error");
 
 class filetype {
   /**
-   * @param {String} type the type to get could be "name" | "mime"
    * @param {String} name the name to check for extension or mimetype
    * @returns {Promise<any>}
    */
@@ -15,10 +14,7 @@ class filetype {
     var res = [];
     if (name == "" || name == undefined)
       throw new Error(`the name cannot be empty or undefined`);
-    var isMime =
-      (await mime.getExtension(name)) != null
-        ? (name = mime.getExtension(name))
-        : name;
+    var isMime = name in mimedb ? (name = mime.getExtension(name)) : name;
 
     var { data } = await utils.get(`fileinfo.com/extension/${name}`);
 
@@ -37,6 +33,7 @@ class filetype {
     }
     //the ext names
     var titles = html.document.querySelectorAll("h2.title");
+
     var categorys = [];
 
     titles.forEach((o, idx) => {
@@ -74,9 +71,15 @@ class filetype {
    * @returns {Promise<any>}
    */
   async search(srcName) {
+    var isMime =
+      srcName in mimedb
+        ? (srcName = mime.getExtension(srcName))
+        : (srcName = srcName);
+
     var res = await utils.get(
       `fileinfo.com/search?sfield=description&query=${srcName}`
     );
+
     var dom = new JSDOM(res.data).window;
     var resArray = [];
     var titles = dom.document.querySelectorAll("td.extcol>a");

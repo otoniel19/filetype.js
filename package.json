@@ -25,10 +25,9 @@
     "@types/node": "^17.0.21"
   },
   "dependencies": {
-    "colors": "^1.4.0",
-    "commander": "^9.0.0",
     "jsdom": "^19.0.0",
-    "mime": "^3.0.0",
+    "mime": "latest",
+    "mime-db": "latest",
     "string-strip-html": "8.3.0",
     "yaml": "^1.10.2"
   }
