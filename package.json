@@ -1,8 +1,9 @@
 {
   "name": "@otoniel19/filetype.js",
   "description": "filetype.js get the type of file by extension name using node.js",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "index.js",
+  "types": "./types",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -16,7 +17,8 @@
     "filetype",
     "information",
     "node.js",
-    "client"
+    "client",
+    "filetype.js"
   ],
   "devDependencies": {
     "@types/jsdom": "^16.2.14",
@@ -28,7 +30,6 @@
     "jsdom": "^19.0.0",
     "mime": "latest",
     "mime-db": "latest",
-    "string-strip-html": "8.3.0",
-    "yaml": "^1.10.2"
+    "string-strip-html": "8.3.0"
   }
 }
