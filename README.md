@@ -8,7 +8,7 @@
 
 > filetype.js supports all mimetypes in [mimedb](https://raw.githubusercontent.com/jshttp/mime-db/master/db.json)
 
-- get info by extension or mimetype
+# get info by extension or mimetype
 
 ```js
 const filetype = require("@otoniel19/filetype.js");
