@@ -4,6 +4,7 @@ const mime = require("mime");
 const mimedb = require("mime-db");
 const { stripHtml } = require("string-strip-html");
 const error = require("./lib/error");
+const cache = require("./cache/cache");
 
 class filetype {
   /**
@@ -15,6 +16,10 @@ class filetype {
     if (name == "" || name == undefined)
       throw new Error(`the name cannot be empty or undefined`);
     var isMime = name in mimedb ? (name = mime.getExtension(name)) : name;
+
+    //check if exists on cache
+    if (cache.get(name) !== undefined)
+      return { extname: name, results: cache.get(name) };
 
     var { data } = await utils.get(`fileinfo.com/extension/${name}`);
 
@@ -61,9 +66,24 @@ class filetype {
           html.document
             .querySelectorAll("a.formatButton")
             [idx].innerHTML.toLowerCase()
-        )
+        ),
+        popularity: {
+          stars: Number(
+            html.document.querySelectorAll("span.stats>span.voteavg")[idx]
+              .innerHTML
+          ),
+          rating: utils.getRate(
+            Number(
+              html.document.querySelectorAll("span.stats>span.voteavg")[idx]
+                .innerHTML
+            )
+          )
+        }
       });
     });
+    cache.get(name) == undefined
+      ? cache.save({ name: name, results: res })
+      : "";
     return { extname: `${name}`, results: res };
   }
   /**
