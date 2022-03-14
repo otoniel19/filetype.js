@@ -15,7 +15,8 @@ class filetype {
     var res = [];
     if (name == "" || name == undefined)
       throw new Error(`the name cannot be empty or undefined`);
-    var isMime = name in mimedb ? (name = mime.getExtension(name)) : name;
+
+    name = utils.parse(name);
 
     //check if exists on cache
     if (cache.get(name) !== undefined)
@@ -68,11 +69,11 @@ class filetype {
             [idx].innerHTML.toLowerCase()
         ),
         popularity: {
-          stars: Number(
+          votes: Number(
             html.document.querySelectorAll("span.stats>span.voteavg")[idx]
               .innerHTML
           ),
-          rating: utils.getRate(
+          usage: utils.getRate(
             Number(
               html.document.querySelectorAll("span.stats>span.voteavg")[idx]
                 .innerHTML

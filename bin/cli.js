@@ -16,7 +16,7 @@ cli
   .description("show the cache")
   .action(() => {
     var table = new cliTable({
-      head: [`extname`, `resultsSize`]
+      head: [`name`, `size`]
     });
     Object.keys(cacheJson).forEach((o) => {
       table.push([o, o.length]);
@@ -26,11 +26,12 @@ cli
 
 cli
   .command("get <extname>")
+  .option("-p,--parse", `returns a parsed json`, false)
   .description("get the file type info")
-  .action(async (ext) => {
+  .action(async (ext, { parse }) => {
     var { get } = require("../index");
     try {
-      log(JSON.stringify(await get(ext)));
+      log(!parse ? JSON.stringify(await get(ext)) : await get(ext));
     } catch (e) {
       log("error".red, e.message);
       process.exit();
@@ -39,11 +40,12 @@ cli
 
 cli
   .command(`search <name>`)
+  .option("-p,--parse", `returns a parsed json`)
   .description(`search by extensions`)
-  .action(async (name) => {
+  .action(async (name, { parse }) => {
     var { search } = require("../index");
     try {
-      log(JSON.stringify(await search(name)));
+      log(!parse ? JSON.stringify(await search(name)) : await search(name));
     } catch (e) {
       log(`error`.red, e.message);
       process.exit();
