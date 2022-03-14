@@ -22,5 +22,29 @@
 				"rating": "average"
 			}
 		}
+	],
+	"jsx": [
+		{
+			"name": "ExtendScript Script File",
+			"description": "Script written in the ExtendScript language, an extension to the JavaScript language; used for writing plug-ins for Adobe Creative Suite (CS) applications; may be created using the ExtendScript Toolkit included with Adobe Utilities.",
+			"mimetype": "text/jsx",
+			"category": "executable",
+			"type": "unknown",
+			"popularity": {
+				"stars": 3.7,
+				"rating": "average"
+			}
+		},
+		{
+			"name": "React JavaScript File",
+			"description": "ExtendScript is a proprietary scripting language developed by Adobe that is similar to JavaScript.",
+			"mimetype": "text/jsx",
+			"category": "developer",
+			"type": "text",
+			"popularity": {
+				"stars": 3.3,
+				"rating": "average"
+			}
+		}
 	]
 }

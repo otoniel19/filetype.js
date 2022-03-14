@@ -9,6 +9,9 @@
     "type": "git",
     "url": "https://github.com/otoniel19/filetype.js"
   },
+  "bin": {
+    "filetype": "./bin/cli.js"
+  },
   "keywords": [
     "mime",
     "jsdom",
@@ -23,11 +26,12 @@
   "devDependencies": {
     "@types/jsdom": "^16.2.14",
     "@types/mime": "^2.0.3",
-    "@types/mime-types": "^2.1.1",
     "@types/node": "^17.0.21"
   },
   "dependencies": {
+    "cli-table3": "^0.6.1",
     "colors": "^1.4.0",
+    "commander": "^9.0.0",
     "jsdom": "^19.0.0",
     "mime": "latest",
     "mime-db": "latest",

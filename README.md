@@ -42,7 +42,7 @@ filetype.get("application/javascript"); //by mimetype
 }
 ```
 
-- search by extension info
+# search by extension info
 
 > you can search by name or mimetype
 
@@ -61,3 +61,23 @@ filetype.search("js").then(console.log);
 ```
 
 > the search has too many results.
+
+# cli
+
+- you can run filetype --help to see commands
+
+```sh
+$ filetype --help
+> Usage: filetype [options] [command]
+> filetype view the type of file
+>
+> Options:
+>  -V, --version   output the version number
+>  -h, --help      display help for command
+>
+> Commands:
+>  cache           show the cache
+>  get <extname>   get the file type info
+>  search <name>   search by extensions
+>  help [command]  display help for command
+```
