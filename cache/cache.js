@@ -1,7 +1,7 @@
 const { log } = require("console");
 const stormdb = require("stormdb");
 const db = new stormdb(
-  new stormdb.localFileEngine("./cache/cache.json", {
+  new stormdb.localFileEngine(__dirname + "/cache.json", {
     serialize: (data) => JSON.stringify(data, null, "\t"),
     deserialize: (data) => JSON.parse(data)
   })
